@@ -19,7 +19,7 @@ class Orders
     private ?string $reference = null;
 
     #[ORM\Column('datetime_immutable', options: ['default' => 'CURRENT_TIMESTAMP'])]
-    private ?\DateTimeImmutable $created_at = null;
+    private  $created_at = null;
 
     #[ORM\ManyToOne(inversedBy: 'orders')]
     private ?Coupons $coupons = null;
@@ -34,6 +34,7 @@ class Orders
     public function __construct()
     {
         $this->ordersDetails = new ArrayCollection();
+        $this->created_at = new \DateTimeImmutable();
     }
 
     public function getId(): ?int

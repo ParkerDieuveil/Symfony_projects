@@ -29,7 +29,7 @@ class Products
     private ?int $stock = null;
 
     #[ORM\Column('datetime_immutable', options: ['default' => 'CURRENT_TIMESTAMP'])]
-    private ?\DateTimeImmutable $created_at = null;
+    private  $created_at = null;
 
     #[ORM\ManyToOne(inversedBy: 'products')]
     #[ORM\JoinColumn(nullable: false)]
@@ -45,6 +45,7 @@ class Products
     {
         $this->images = new ArrayCollection();
         $this->ordersDetails = new ArrayCollection();
+        $this->created_at = new \DateTimeImmutable();
     }
 
     public function getId(): ?int
