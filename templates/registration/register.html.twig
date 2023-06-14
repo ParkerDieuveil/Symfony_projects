@@ -28,7 +28,9 @@
                 }) }}
                 {{ form_row(registrationForm.rgpdConsent) }}
 
-                <button type="submit" class="btn btn-primary btn-lg my-3">M'inscrire</button>
+                    <button type="submit" class="btn btn-primary btn-lg my-3">M'inscrire</button>
+
+                    <a href ="{{path('app_login') }}" class = "btn btn-secondary my-3"> Me connecter</a>
             {{ form_end(registrationForm) }}
     </div>
 </section>
