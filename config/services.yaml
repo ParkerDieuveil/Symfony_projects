@@ -30,3 +30,6 @@ services:
 
   App\Controller\CategoriesController:
     autowire: true
+
+  App\Entity\Images:
+    autowire: true

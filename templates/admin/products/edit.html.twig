@@ -15,3 +15,46 @@
     </main>
 
 {% endblock %}
+
+{% block javascripts %}
+
+<script>
+     let links = document.querySelectorAll("[data-delete]");
+        console.log(links);
+        // on boucle sur les liens
+
+        for (let link of links) {
+        // écouteur d'évenements
+
+        link.addEventListener("click", function (e) {
+            // empecher la navigation
+            e.preventDefault();
+            // on demande confirmation
+            if (confirm("Voulez-vous supprimer cette image ? ")) {
+            // on envoie la requête ajax
+            fetch(this.getAttribute("href"), {
+                method: "DELETE",
+                headers: {
+                "X-Requested-with": "XMLHttpRequest",
+                "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ _token: this.dataset.token }),
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                if (data.success) {
+                    this.parentElement.remove();
+                } else {
+                    alert(data.console.error);
+                }
+                });
+            }
+        });
+        }
+
+    
+ </script>
+
+ <script src="{{ asset('assets/js/images.js') }}" defer></script>
+
+{% endblock %}

@@ -1,3 +1,8 @@
 controllers:
-    resource: ../src/Controller/
-    type: attribute
+  resource: ../src/Controller/
+  type: attribute
+
+delete_image:
+  path: /suppression/image/{imageId}
+  controller: App\Controller\ProductsController::deleteImage
+  methods: [DELETE, GET]

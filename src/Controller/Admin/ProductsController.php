@@ -10,6 +10,7 @@ use App\Service\PictureService;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -157,13 +158,28 @@ class ProductsController extends AbstractController
         ]);
     }
 
-    #[Route('/suppression/{id}', name: 'delete')]
-    public function delete(Products $product): Response
+    #[Route('/suppression/image/{id}', name: 'delete_image', methods: ['DELETE', 'GET'])]
+    public function deleteImage(Images $image, Request $request, EntityManagerInterface $em, PictureService $pictureService): JsonResponse
     {
-        //on vérifie si l'utilisateur peut supprimer à partir du voter
-        $this->denyAccessUnlessGranted('PRODUCT_DELETE', $product);
+        // On récupère le contenu de la requête
+        $data = json_decode($request->getContent(), true);
 
+        if ($this->isCsrfTokenValid('delete' . $image->getId(), $data['_token'])) {
+            // Le token csrf est valide
+            // On récupère le nom de l'image
+            $nom = $image->getName();
 
-        return $this->render('admin/products/index.html.twig');
+            if ($pictureService->delete($nom, 'products', 300, 300)) {
+                // On supprime l'image de la base de données
+                $em->remove($image);
+                $em->flush();
+
+                return new JsonResponse(['success' => true], 200);
+            }
+            // La suppression a échoué
+            return new JsonResponse(['error' => 'Erreur de suppression'], 400);
+        }
+
+        return new JsonResponse(['error' => 'Token invalide'], 400);
     }
 }
